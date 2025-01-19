@@ -1,0 +1,33 @@
+{
+  "name": "job-portal-API",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"node --watch ./build/index.js \" \"npx tsc --watch\"",
+    "build": "npx tsc",
+    "start": "node ./build/index.js",
+    "test:ts": "jest --config=jest.ts.config.js",
+    "test:js": "npm run build && jest --config=jest.js.config.js",
+    "test:all": "npm run test:ts && npm run test:js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "bcrypt": "^5.1.1",
+    "concurrently": "^9.1.2",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "typescript": "^5.7.3",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5"
+  }
+}
