@@ -9,12 +9,13 @@
     "start": "node ./build/index.js",
     "test:ts": "jest --config=jest.ts.config.js",
     "test:js": "npm run build && jest --config=jest.js.config.js",
-    "test:all": "npm run test:ts && npm run test:js"
+    "test": "npm run test:ts && npm run test:js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/nodemailer": "^6.4.17",

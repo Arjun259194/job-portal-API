@@ -1,7 +1,9 @@
+import env from "../env";
 import { MailBuilder } from "../lib/email";
 
 beforeAll(() => {
-  jest.spyOn(console, "error").mockImplementation(() => { }); // Mock console.error
+  env();
+  jest.spyOn(console, "error").mockImplementation(() => {}); // Mock console.error
 });
 
 afterAll(() => {

@@ -3,7 +3,7 @@ import AuthToken from "../lib/auth";
 
 beforeAll(() => {
   env();
-  jest.spyOn(console, "error").mockImplementation(() => {}); // Mock console.error
+  jest.spyOn(console, "error").mockImplementation(() => { }); // Mock console.error
 });
 
 afterAll(() => {
