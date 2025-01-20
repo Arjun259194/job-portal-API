@@ -2,7 +2,6 @@ import express, { json, urlencoded } from "express";
 import env from "./env";
 
 env();
-
 const server = express();
 
 server.use(json());
