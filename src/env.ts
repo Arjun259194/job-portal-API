@@ -9,11 +9,15 @@ const envSchema = z.object({
   EMAIL_TOKEN: z.string().nonempty(),
   EMAIL_ADDRESS: z.string().email().nonempty(),
   PASSWORD_SALT_ROUNDS: z.string().min(1).nonempty(),
+  S3_NAME: z.string().nonempty(),
+  S3_REGION: z.string().nonempty(),
+  S3_ACCESS_KEY: z.string().nonempty(),
+  S3_SECRET_KEY: z.string().nonempty(),
 });
 
 declare global {
   namespace NodeJS {
-    interface ProcessEnv extends z.infer<typeof envSchema> { }
+    interface ProcessEnv extends z.infer<typeof envSchema> {}
   }
 }
 
