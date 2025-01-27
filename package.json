@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "prisma": {
+    "seed": "npx ts-node ./prisma/seed.ts"
+  },
   "scripts": {
-    "dev": "concurrently \"node --watch ./build/index.js \" \"npx tsc --watch\"",
+    "dev": "concurrently \"node --watch ./build/server.js \" \"npx tsc --watch\"",
     "build": "rm -rf ./build && npx tsc",
-    "start": "node ./build/index.js",
+    "start": "node ./build/server.js",
     "test:ts": "jest --config=jest.ts.config.js",
     "test:js": "npm run build && jest --config=jest.js.config.js",
     "test": "npm run test:ts && npm run test:js"
@@ -17,23 +20,26 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.731.1",
     "@aws-sdk/s3-request-presigner": "^3.731.1",
-    "@types/bcrypt": "^5.0.2",
-    "@types/express": "^5.0.0",
-    "@types/jsonwebtoken": "^9.0.7",
-    "@types/nodemailer": "^6.4.17",
+    "@prisma/client": "6.2.1",
     "bcrypt": "^5.1.1",
-    "concurrently": "^9.1.2",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "handlebars": "^4.7.8",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.16",
+    "prisma": "^6.2.1",
     "typescript": "^5.7.3",
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/nodemailer": "^6.4.17",
+    "concurrently": "^9.1.2",
     "jest": "^29.7.0",
-    "ts-jest": "^29.2.5"
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2"
   }
 }

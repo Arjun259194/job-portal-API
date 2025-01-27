@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  JOB_SEEKER
+  EMPLOYEER
+}
+
+enum JobType {
+  OFFICE
+  REMOTE
+  HYBRID
+}
+
+enum ApplicationState {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model User {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  email         String   @unique
+  contactNumber String?
+  name          String
+  password      String
+  role          UserRole @default(JOB_SEEKER)
+  profileImage  String
+  dateOfBirth   DateTime
+  otp           Otp?
+
+  notifications Notification[]
+  jobs          Job[]
+  applications  Application[]
+  Comments      Comment[]
+}
+
+model Job {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String
+  employerId    String?       @db.ObjectId
+  location      String
+  salaryRangeId String        @unique @db.ObjectId
+  closingDate   DateTime
+  active        Boolean
+  tags          String[]
+  type          JobType       @default(OFFICE)
+  Employer      User?         @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  salaryRange   SalaryRange   @relation(fields: [salaryRangeId], references: [id])
+  Applications  Application[]
+  Comments      Comment[]
+}
+
+model Otp {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  code   Int
+  userId String @unique @db.ObjectId
+  User   User?  @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  User      User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String? @db.ObjectId
+  title     String
+  content   String
+  link      String?
+  recevided Boolean
+}
+
+model SalaryRange {
+  id  String @id @default(auto()) @map("_id") @db.ObjectId
+  max Int
+  min Int
+  Job Job?
+}
+
+model Application {
+  id     String           @id @default(auto()) @map("_id") @db.ObjectId
+  state  ApplicationState @default(PENDING)
+  Job    Job?             @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobId  String?          @db.ObjectId
+  User   User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String?          @db.ObjectId
+}
+
+model Comment {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  content  String
+  writer   User    @relation(fields: [writerId], references: [id], onDelete: Cascade)
+  writerId String  @db.ObjectId
+  Job      Job?    @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobId    String? @db.ObjectId
+}
