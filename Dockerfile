@@ -4,16 +4,16 @@ WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN npm install 
+RUN npm install -g pnpm &&  pnpm install 
 
 COPY . .
 
-RUN npm run prisma
+RUN pnpm prisma
 
-RUN npm run build
+RUN pnpm build
 
 ENV NODE_ENV=production
 
 EXPOSE 3000
 
-CMD [ "npm", "run", "start" ]
+CMD [ "pnpm", "start" ]

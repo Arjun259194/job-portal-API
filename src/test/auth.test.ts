@@ -76,8 +76,11 @@ describe("Auth token Tests", () => {
 
     // This test is failing, startt from here good night
     test("should expire after the given expire time", () => {
-      const stringToken = tokenizer.serialize(new Token(DUMMY_DATA), tokenExpireTime);
-        jest.advanceTimersByTime((tokenExpireTime + 1) * 1000);
+      const stringToken = tokenizer.serialize(
+        new Token(DUMMY_DATA),
+        tokenExpireTime,
+      );
+      jest.advanceTimersByTime((tokenExpireTime + 1) * 1000);
 
       const afterExpirePayload = tokenizer.deserialize(stringToken);
       expect(afterExpirePayload).toBeUndefined();
