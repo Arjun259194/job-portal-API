@@ -4,6 +4,12 @@ import { config } from "dotenv";
 config();
 
 const envSchema = z.object({
+  PORT: z.string()
+  .regex(/^\d+$/, { message: "Port must be a numeric string." }) // Ensure it's numeric
+  .transform(Number) // Convert string to number
+  .refine((port) => port >= 1 && port <= 65535, {
+    message: "Port number must be between 1 and 65535.",
+  }),
   JWT_SECRET: z.string().min(32).nonempty(),
   DATABASE_URL: z.string().nonempty(),
   EMAIL_TOKEN: z.string().nonempty(),

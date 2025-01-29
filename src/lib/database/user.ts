@@ -1,22 +1,23 @@
 import { PrismaClient, User } from "@prisma/client";
-import { z } from "zod";
+import { Optional } from "../../types";
 
-class NewUserData {
-  constructor() {
-    const x = z.object({
-      name: z.string(),
-      email: z.string()
-    }).omit({
-      name: true
-    })
+type UpdateUserData = Optional<Omit<User, "id">>;
+
+export default class UserRepo {
+  constructor(private prisma: PrismaClient) {}
+
+  async find(id: string) {
+    return await this.prisma.user.findFirst({ where: { id } });
   }
 
-export class UserRepo {
-  constructor(private prisma: PrismaClient) { }
-
-  async new(data: UserCreateInput) {
-    return this.prisma.user.create({ data });
+  async update(id: string, updates: UpdateUserData) {
+    const obj = Object.fromEntries(
+      Object.entries(updates).filter(([_, value]) => value !== undefined),
+    );
+    return await this.prisma.user.update({ where: { id }, data: obj });
   }
 
-  async read(id: string) { }
+  async delete(id: string) {
+    return await this.prisma.user.delete({ where: { id } });
+  }
 }
