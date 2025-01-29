@@ -1,40 +1,39 @@
 import jwt from "jsonwebtoken";
 import z from "zod";
 
-export type AuthTokenPayload = z.infer<typeof AuthToken.schema>;
+export type AuthTokenPayload = z.infer<typeof Token.schema>;
 
-export default class AuthToken {
-  private static readonly SECRET: string = process.env.JWT_SECRET;
-
+export class Token {
   static readonly schema = z.object({
     id: z.string().uuid(),
     email: z.string().email(),
   });
 
-  private expireIn: number | string;
+  public data: AuthTokenPayload;
 
-  constructor(public data: AuthTokenPayload) {
-    this.expireIn = "3 days";
-    AuthToken.schema.parse(data);
+  constructor(data: any) {
+    this.data = Token.schema.parse(data);
   }
+}
 
-  static from(tokenString: string): AuthToken | undefined {
+export default class AuthToken {
+  constructor(private readonly SECRET: string) {}
+
+  deserialize(tokenString: string): Token | undefined {
     try {
-      const solvedToken = jwt.verify(tokenString, AuthToken.SECRET);
+      const solvedToken = jwt.verify(tokenString, this.SECRET);
       if (!solvedToken) return;
 
-      const data = AuthToken.schema.parse(solvedToken);
-
-      return new AuthToken(data);
+      return new Token(solvedToken);
     } catch (error) {
       console.error(error);
       return;
     }
   }
 
-  public serialize(expire?: number): string {
-    return jwt.sign(this.data, AuthToken.SECRET, {
-      expiresIn: expire || this.expireIn,
+  public serialize(token: Token, exp: string | number = "3 days"): string {
+    return jwt.sign(token.data, this.SECRET, {
+      expiresIn: exp,
     });
   }
 }
